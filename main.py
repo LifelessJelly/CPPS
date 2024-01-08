@@ -1,66 +1,67 @@
-import csv                          # for reading csv files
-import matplotlib.pyplot as plt     # for pyplot.subplot and other functions
-import matplotlib.ticker as tkr     # for ticker.MultipleLocator()
-from typing import List             # type hinting for List
-
+import csv  # for reading csv files
+import matplotlib.pyplot as plt  # for pyplot.subplot and other functions
+import matplotlib.ticker as tkr  # for ticker.MultipleLocator()
+from typing import List  # type hinting for List
 
 # create a class for all static variables (so that these variables' lifetime last through the whole program)
-class Static:
-    busPassengers: List[int]
-    buses: List[int]
-    personalVehicles: List[int]
-    loadedTrucks: List[int]
-    attrData: List[List[int]] = [[] for i in range(4)]
-    attrNames: [List[str]] = ["bus passengers", "buses", "personal vehicles", "loaded trucks"]
+
+attrData: List[List[int]] = []
+attrNames: [List[str]] = []
+
+
 # anything with a SV. prefix refers to the class holding static variables
 
 
-def displayDivider():
+def displayDivider() -> None:
     print("-" * 119)
 
 
 # function for displaying bus statistics
-def displayBuses():
+def displayBuses() -> None:
     print()
     print("The statistics for buses crossing the border each year are:")
     displayDivider()
-    for yearPassed, num in enumerate(Static.buses):
+    for yearPassed, num in enumerate(attrData[1]):
         print(f"{2000 + yearPassed}: {num}")
     displayDivider()
     return
 
 
 # function for displaying user's input statistics
-def displayUserInput(userInput: str):
+def displayUserInput(userInput: str) -> None:
     print()
+    if userInput == '\n':
+        return
     # convert option to index supported value A -> 0, B -> 1, C -> 2, D -> 3
     userIn: int = ord(userInput) - ord('A')
     # make a list reference to the StaticVariables class object to the user's selected option
-    selected: List[int] = Static.attrData[userIn]
+    selected: List[int] = attrData[userIn]
     # use sum() to sum from index 0 to 7 for calculating average
     sumSelection: int = sum(selected[0:7])
     displayDivider()
 
     # print the mean number of the user's chosen variable
-    print(f"The mean number of {Static.attrNames[userIn]} crossing the border each year is "
+    print(f"The mean number of {attrNames[userIn]} crossing the border each year is "
           f"{sumSelection / len(selected[0:7]):.0f}")
 
     # use max to return max value in the index range 0 to 7
     print(f"In {2000 + selected.index(max(selected[0:7]))} crossed the highest number of "
-          f"{Static.attrNames[userIn]} from the year 2000 to 2007 with "
-          f"{max(selected[0:7])} {Static.attrNames[userIn]}")
+          f"{attrNames[userIn]} from the year 2000 to 2007 with "
+          f"{max(selected[0:7])} {attrNames[userIn]}")
 
     displayDivider()
     return
 
 
-def displayYrOnYr(userInput: str):
+def displayYrOnYr(userInput: str) -> None:
     print()
+    if userInput == '\n':
+        return
     userIn: int = ord(userInput) - ord('A')
-    selected: List[int] = Static.attrData[userIn]
+    selected: List[int] = attrData[userIn]
 
     displayDivider()
-    print(f"The changes in {Static.attrNames[userIn]} crossing the border year on year are:")
+    print(f"The changes in {attrNames[userIn]} crossing the border year on year are:")
 
     # Store the years that have a growth of 5% or more
     moreThan5: List[int] = []
@@ -77,7 +78,7 @@ def displayYrOnYr(userInput: str):
     # Display years that have 5% or more increase in traffic
     if len(moreThan5) != 0:
         print(f"\nThe following {'years' if len(moreThan5) > 1 else 'year'} have shown an increase of 5% of "
-              f"{Static.attrNames[userIn]} crossing the border year on year:")
+              f"{attrNames[userIn]} crossing the border year on year:")
         for i in moreThan5:
             print(f"{i - 1}-{i}")
 
@@ -85,12 +86,12 @@ def displayYrOnYr(userInput: str):
     return
 
 
-def displayPlot():
+def displayPlot() -> None:
     # 2 subplots, using constrained layout (scales plot to fit every element on the figure)
     fig, axis = plt.subplots(2, layout="constrained")
-    busPerPerson: List[float] = [passenger / Static.buses[index]
-                                 for index, passenger in enumerate(Static.busPassengers)]
-    personalVehiclesThousands: List[float] = [vehicles / 1000 for vehicles in Static.personalVehicles]
+    busPerPerson: List[float] = [passenger / attrData[1][index]
+                                 for index, passenger in enumerate(attrData[0])]
+    personalVehiclesThousands: List[float] = [vehicles / 1000 for vehicles in attrData[2]]
     # The following code below was written with reference to documentation on matplotlib.org
     # Plot the graph for first subplot
     axis[0].plot(range(2000, 2013), busPerPerson, label="Bus passengers per bus")
@@ -115,31 +116,31 @@ def displayPlot():
     return
 
 
-def getUserSubInput():
+def getUserSubInput() -> str:
     print(f"{'-' * 43} List of available option inputs {'-' * 43}")
     print("Options:")
-    print("A: Bus passengers \nB: Buses \nC: Personal Vehicles \nD: Loaded trucks")
+    for i, name in enumerate(attrNames):
+        print(f"{chr(ord('A') + i)}: {name}")
     print("Select an option above to view the data")
+    print("Or press enter to go back")
     # keep prompting the user for input until they give valid input
     while True:
         userInput: str = input("Please enter your selection: ").upper()
-        if userInput == 'A' or userInput == "BUS PASSENGERS":
-            return 'A'
-        if userInput == 'B' or userInput == "BUSES":
-            return 'B'
-        if userInput == 'C' or userInput == "PERSONAL VEHICLES":
-            return 'C'
-        if userInput == 'D' or userInput == "LOADED TRUCKS":
-            return 'D'
-        else:
-            print("invalid selection input, please try again")
+        for c in attrNames:
+            char: str = chr(attrNames.index(c) + ord('A'))
+            if userInput == c.upper() or userInput == char:
+                return char
+        if len(userInput) == 0:
+            return '\n'
+        print("invalid selection input, please try again")
 
 
-def showMenu():
+def showMenu() -> None:
     print(f"{'-' * 45} Border Crossing Vehicles 2 {'-' * 46}")
     print("Options:")
     print(f"A: Display the number of Buses crossing the border for each year, for the 13-year period\n"
-          f"B: Display user-selected input's mean number of vehicles from 2000 to 2007 and the maximum traffic in the 8 years \n"
+          f"B: Display user-selected input's mean number of vehicles from 2000 to 2007 and the maximum traffic in the "
+          f"8 years \n"
           f"C: Display user-selected input's year on year growth and list down years that have an increase of >5% \n"
           f"D: Show a graph of bus passengers per bus vs year and number of personal vehicles vs year")
     print("Select an option above to view the data, or type 'Q' or 'Quit' to exit the program")
@@ -152,22 +153,22 @@ def getUserInput() -> str:
         if userInput == 'A' or userInput == "1":
             displayBuses()
             return 'A'
-        elif userInput == 'B' or userInput == "2":
+        if userInput == 'B' or userInput == "2":
             displayUserInput(getUserSubInput())
             return 'B'
-        elif userInput == 'C' or userInput == "3":
+        if userInput == 'C' or userInput == "3":
             displayYrOnYr(getUserSubInput())
             return 'C'
-        elif userInput == 'D' or userInput == "4":
+        if userInput == 'D' or userInput == "4":
             displayPlot()
             return 'D'
-        elif userInput == 'Q' or userInput == 'QUIT':
-            return 'Q'
+        if userInput == "QUIT":
+            return "QUIT"
         else:
             print("invalid selection input, please try again")
 
 
-def readCSV():
+def readCSV() -> None:
     # read CSV file
     with open(r".\brdrxingusc_dataset.csv", newline='') as loadCSV:
         getCSVContent = csv.reader(loadCSV)
@@ -176,24 +177,24 @@ def readCSV():
         i: int = 0
         # Dictionaries are disallowed, so we'll just copy data from CSV to a 2D list
         for eachRow in getCSVContent:
+            attrNames.append(eachRow[0])
+            attrData.append([])
             # map function maps iterable variables to a new type
-            Static.attrData[i] = list(map(int, eachRow[1:len(eachRow)]))
+            attrData[i] = list(map(int, eachRow[1:len(eachRow)]))
             i += 1
-        Static.busPassengers = Static.attrData[0]
-        Static.buses = Static.attrData[1]
-        Static.personalVehicles = Static.attrData[2]
-        Static.loadedTrucks = Static.attrData[3]
+
     return
 
 
-def main():
+def main() -> int:
     readCSV()
+
     while True:
         showMenu()
         userSelection = getUserInput()
-        if userSelection == 'Q':
+        if userSelection == "QUIT":
             print("EXITING PROGRAM")
-            return
+            return 0
         print()
         input("Press Enter to continue")
 
