@@ -165,8 +165,7 @@ def getUserInput() -> str:
             return 'D'
         if userInput == "QUIT":
             return "QUIT"
-        else:
-            print("invalid selection input, please try again")
+        print("invalid selection input, please try again")
 
 
 def readCSV() -> None:
