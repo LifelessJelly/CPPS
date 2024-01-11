@@ -2,13 +2,14 @@ import csv  # for reading csv files
 import matplotlib.pyplot as plt  # for pyplot.subplot and other functions
 import matplotlib.ticker as tkr  # for ticker.MultipleLocator()
 from typing import List  # type hinting for List
+from pathlib import Path  # for Path.cwd()
 
 # create a class for all static variables (so that these variables' lifetime last through the whole program)
 
 attrData: List[List[int]] = []
 attrNames: [List[str]] = []
 
-
+filePath = Path.cwd() / "brdrxingusc_dataset.csv"
 # anything with a SV. prefix refers to the class holding static variables
 
 
@@ -77,7 +78,7 @@ def displayYrOnYr(userInput: str) -> None:
 
     # Display years that have 5% or more increase in traffic
     if len(moreThan5) != 0:
-        print(f"\nThe following {'years' if len(moreThan5) > 1 else 'year'} have shown an increase of 5% of "
+        print(f"\nThe following years have shown an increase of 5% of "
               f"{attrNames[userIn]} crossing the border year on year:")
         for i in moreThan5:
             print(f"{i - 1}-{i}")
@@ -143,7 +144,7 @@ def showMenu() -> None:
           f"8 years \n"
           f"C: Display user-selected input's year on year growth and list down years that have an increase of >5% \n"
           f"D: Show a graph of bus passengers per bus vs year and number of personal vehicles vs year")
-    print("Select an option above to view the data, or type 'Q' or 'Quit' to exit the program")
+    print("Select an option above to view the data, or type 'Quit' to exit the program")
 
 
 def getUserInput() -> str:
@@ -170,7 +171,7 @@ def getUserInput() -> str:
 
 def readCSV() -> None:
     # read CSV file
-    with open(r".\brdrxingusc_dataset.csv", newline='') as loadCSV:
+    with filePath.open(mode="r", encoding="UTF-8", newline="") as loadCSV:
         getCSVContent = csv.reader(loadCSV)
         # this next line removes the dates as a list
         next(getCSVContent)
