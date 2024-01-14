@@ -174,14 +174,12 @@ def readCSV() -> None:
         getCSVContent = csv.reader(loadCSV)
         # this next line removes the dates as a list
         next(getCSVContent)
-        i: int = 0
         # Dictionaries are disallowed, so we'll just copy data from CSV to a 2D list
         for eachRow in getCSVContent:
             attrNames.append(eachRow[0])
             attrData.append([])
             # map function maps iterable variables to a new type
-            attrData[i] = list(map(int, eachRow[1:len(eachRow)]))
-            i += 1
+            attrData[len(attrData)-1] = list(map(int, eachRow[1:len(eachRow)]))
 
     return
 
