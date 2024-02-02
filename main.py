@@ -5,23 +5,25 @@ from typing import List  # type hinting for List
 from pathlib import Path  # for Path.cwd()
 
 
-# create a class for all static variables (so that these variables' lifetime last through the whole program)
-
 attrData: List[List[int]] = []
 attrNames: [List[str]] = []
 
-filePath = Path.cwd() / "TestCase3.csv"
-
-
-# anything with a SV. prefix refers to the class holding static variables
+filePath = Path.cwd() / "brdrxingusc_dataset.csv"
 
 
 def displayDivider() -> None:
+    """Prints a line divider
+    :return:
+    """
     print("-" * 119)
 
 
 # function for displaying bus statistics
 def displayBuses() -> None:
+    """Prints
+
+    :return:
+    """
     print()
     print("The statistics for buses crossing the border each year are:")
 
