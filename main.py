@@ -4,11 +4,8 @@ import matplotlib.ticker as tkr  # for ticker.MultipleLocator()
 from typing import List  # type hinting for List
 from pathlib import Path  # for Path.cwd()
 
-
 attrData: List[List[int]] = []
 attrNames: [List[str]] = []
-
-filePath = Path.cwd() / "brdrxingusc_dataset.csv"
 
 
 def displayDivider() -> None:
@@ -20,12 +17,12 @@ def displayDivider() -> None:
 
 # function for displaying bus statistics
 def displayBuses() -> None:
-    """Prints
+    """Displays info for task 1
 
     :return:
     """
     print()
-    print("The statistics for buses crossing the border each year are:")
+    print(f"The statistics for {attrNames[1].lower()} crossing the border each year are:")
 
     displayDivider()
 
@@ -35,15 +32,15 @@ def displayBuses() -> None:
         print(f"{year}: {num}")
 
     displayDivider()
-
+    input("Press Enter to continue \n")
     return
 
 
 # function for displaying user's input statistics
 def displayUserInput(userInput: str) -> None:
-    """ Displays user selected input for task 2
+    """Displays user selected input for task 2
 
-    :param userInput:
+    :param userInput: the user's input
     :return:
     """
     print()
@@ -67,12 +64,12 @@ def displayUserInput(userInput: str) -> None:
           f"{maxSelection} {nameSelection}")
 
     displayDivider()
-
+    input("Press Enter to continue \n")
     return
 
 
 def displayYrOnYr(userInput: str) -> None:
-    """
+    """Displays user selected input for task 3
 
     :param userInput: the user's input
     :return:
@@ -109,6 +106,7 @@ def displayYrOnYr(userInput: str) -> None:
             print(f"{eachYear - 1}-{eachYear}")
 
     displayDivider()
+    input("Press Enter to continue \n")
     return
 
 
@@ -146,6 +144,7 @@ def displayPlot() -> None:
     axis[1].legend(loc='lower left')
 
     plt.show()
+    input("Press Enter to continue \n")
     return
 
 
@@ -165,7 +164,7 @@ def getUserSubInput() -> str:
     To determine and correctly output the data chosen by the user, the function performs a similar operation as to where
     it displays the available data options. \n
     The function gets the user input, then attempt to match the user's input with either the non-case sensitive data
-    identifier or the alphabetical index, by using a .index() method to get the position that the data identtifier is in
+    identifier or the alphabetical index, by using a .index() method to get the position that the data identifier is in
     >? Please enter your selection: b \n
     >> userInput = "b".upper() -> "B" \n
     >> name = "BUS PASSENGERS" \n
@@ -175,7 +174,7 @@ def getUserSubInput() -> str:
     >> name = "BUSES" \n
     >> attrNames.index(name) -> 1 \n
     >> charIndex = chr(1 + 65) -> 'B' \n
-    >> if userInput == name or userInput == charIndex -> 'B' != "BUSES" || 'B' == "B" // Evalutes to true \n
+    >> if userInput == name or userInput == charIndex -> 'B' != "BUSES" || 'B' == "B" // Evaluates to true \n
 
 
     :return: the user's input
@@ -187,7 +186,7 @@ def getUserSubInput() -> str:
         selectionOption: str = chr(asciiA + i)
         print(f"{selectionOption}: {name}")
     print("Select an option above to view the data")
-    print("Or press enter to go back")
+    print("Or press Enter to go back")
     # keep prompting the user for input until they give valid input
     while True:
         userInput: str = input("Please enter your selection: ").upper()
@@ -247,9 +246,37 @@ def getUserInput() -> str:
         print("invalid selection input, please try again")
 
 
-def readCSV() -> None:
+def readCSV(fp: Path) -> None:
+    """Reads the csv file passed into this function
+
+    csv files passed into this function should follow the table format where the data is pivoted such that the
+    vehicle types are the index, and the columns are the months. \n
+    e.g.: \n
+    \+--------+--------+--------+---------+\n
+    \|  Type  |  2000  |  2001  |  2002  |\n
+    \+--------+--------+--------+---------+\n
+    \| Cars  |  1234  |  5678  |   9012  |\n
+    \+--------+--------+--------+---------+\n
+
+    Where months reside at the top of the table representing columns, and the type of vehicles on the left of the
+    table representing indexes.
+
+    Not following this format will result in an undefined behaviour in the creation of the list of elements.
+
+    This function then reads the entire .csv file and reads the lines row by row, delimited by a comma.
+
+    The function then retrieves the name of the index (by indexing the first element in the line) and puts it into a
+    list, then puts the rest of the variables in another list.
+
+    Since the values gathered from the .csv file are in str format, it will be unusable in arithmetic operations
+    unless it is converted to an int or float type. Using a for-each loop would be exhausting and slow for very large
+    sets of data, so the function uses the map() function instead.
+
+    :param fp: the filepath location as a pathlib.Path type
+    :return:
+    """
     # read CSV file
-    with filePath.open(mode="r", encoding="UTF-8", newline="") as loadCSV:
+    with fp.open(mode="r", encoding="UTF-8", newline="") as loadCSV:
         getCSVContent = csv.reader(loadCSV)
         # skip metadata
         next(getCSVContent)
@@ -265,7 +292,8 @@ def readCSV() -> None:
 
 #  program starts here
 def main() -> int:
-    readCSV()
+    filePath = Path.cwd() / "brdrxingusc_dataset.csv"
+    readCSV(filePath)
 
     while True:
         showMenu()
@@ -274,7 +302,6 @@ def main() -> int:
             print("EXITING PROGRAM")
             return 0
         print()
-        input("Press Enter to continue")
 
 
 if __name__ == '__main__':
