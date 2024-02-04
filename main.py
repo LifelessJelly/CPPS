@@ -120,11 +120,8 @@ def displayPlot() -> None:
     """
     # 2 subplots, using constrained layout (scales plot to fit every element on the figure)
     fig, axis = plt.subplots(2, layout="constrained")
-    busPerPerson: List[float] = [passenger / attrData[1][index]
-                                 for index, passenger in enumerate(attrData[0])]
-    personalVehiclesThousands: List[float] = [vehicles / 1000 for vehicles in attrData[2]]
-    # The following code below was written with reference to documentation on matplotlib.org
-    # Plot the graph for first subplot
+    busPerPerson: List[float] = [passenger / bus for passenger, bus in zip(attrData[0], attrData[1])]
+    personalVehiclesThousands: List[float] = attrData[2]
     axis[0].plot(range(2000, 2013), busPerPerson, label=f"{attrNames[0].capitalize()} per {attrNames[1].lower()}")
     axis[0].set_title(f"Traffic data of {attrNames[0].lower()} per {attrNames[1].lower()} from 2000 to 2012")
     axis[0].grid()
@@ -132,16 +129,18 @@ def displayPlot() -> None:
     axis[0].xaxis.set_major_locator(tkr.MultipleLocator(1))
     axis[0].yaxis.set_minor_locator(tkr.MultipleLocator(1))
     axis[0].legend()
-    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {attrNames[2].lower()} "
-                                                                                 "(1k intervals)")
+    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {attrNames[2].lower()}", color="red")
     # Plot the graph for second subplot
-    axis[1].set_title(f"Traffic data of every 1000 {attrNames[2].lower()} from 2000 to 2012")
+    axis[1].set_title(f"Traffic data of {attrNames[2].lower()} from 2000 to 2012")
     axis[1].grid()
     axis[1].set(xlabel="year", ylabel=f"Number of {attrNames[2].lower()}")
     axis[1].xaxis.set_major_locator(tkr.MultipleLocator(1))
-    axis[1].yaxis.set_minor_locator(tkr.MultipleLocator(125))
+    axis[1].yaxis.set_minor_locator(tkr.MultipleLocator(50000))
     axis[1].set_xlim(2000 - 0.5, 2012 + 0.5)
     axis[1].legend(loc='lower left')
+
+    # turn off scientific notation
+    plt.ticklabel_format(style='plain')
 
     plt.show()
     input("Press Enter to continue \n")
