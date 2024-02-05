@@ -4,8 +4,8 @@ import matplotlib.ticker as tkr  # for ticker.MultipleLocator()
 from typing import List  # type hinting for List
 from pathlib import Path  # for Path.cwd()
 
-attrData: List[List[int]] = []
-attrNames: [List[str]] = []
+dataAtIndex: List[List[int]] = []
+nameAtIndex: [List[str]] = []
 
 
 def displayDivider() -> None:
@@ -22,11 +22,11 @@ def displayBuses() -> None:
     :return:
     """
     print()
-    print(f"The statistics for {attrNames[1].lower()} crossing the border each year are:")
+    print(f"The statistics for {nameAtIndex[1].lower()} crossing the border each year are:")
 
     displayDivider()
 
-    busData: List[int] = attrData[1]
+    busData: List[int] = dataAtIndex[1]
     for yearPassed, num in enumerate(busData):
         year = 2000 + yearPassed
         print(f"{year}: {num}")
@@ -48,10 +48,10 @@ def displayUserInput(userInput: str) -> None:
         return
     # convert option to index supported value A -> 0, B -> 1, C -> 2, D -> 3
     userIn: int = (ord(userInput) - ord('A'))
-    selected: List[int] = attrData[userIn][0:8]
+    selected: List[int] = dataAtIndex[userIn][0:8]
     sumSelection: int = sum(selected)
     maxSelection: int = max(selected)
-    nameSelection: str = attrNames[userIn]
+    nameSelection: str = nameAtIndex[userIn]
 
     displayDivider()
 
@@ -60,7 +60,7 @@ def displayUserInput(userInput: str) -> None:
           f"{sumSelection / len(selected):.0f} (Truncated down to nearest whole number)")
 
     print(f"In {2000 + selected.index(maxSelection)} crossed the highest number of "
-          f"{attrNames[userIn]} from the year 2000 to 2007 with "
+          f"{nameAtIndex[userIn]} from the year 2000 to 2007 with "
           f"{maxSelection} {nameSelection}")
 
     displayDivider()
@@ -78,11 +78,11 @@ def displayYrOnYr(userInput: str) -> None:
     if userInput == '\n':
         return
     userIn: int = ord(userInput) - ord('A')
-    selected: List[int] = attrData[userIn]
+    selected: List[int] = dataAtIndex[userIn]
 
     displayDivider()
 
-    print(f"The changes in {attrNames[userIn]} crossing the border year on year are:")
+    print(f"The changes in {nameAtIndex[userIn]} crossing the border year on year are:")
 
     # Store the years that have a growth of 5% or more
     moreThan5: List[int] = []
@@ -101,7 +101,7 @@ def displayYrOnYr(userInput: str) -> None:
     # Display years that have 5% or more increase in traffic
     if len(moreThan5) != 0:
         print(f"\nThe following years have shown an increase of 5% of "
-              f"{attrNames[userIn]} crossing the border year on year:")
+              f"{nameAtIndex[userIn]} crossing the border year on year:")
         for eachYear in moreThan5:
             print(f"{eachYear - 1}-{eachYear}")
 
@@ -120,21 +120,21 @@ def displayPlot() -> None:
     """
     # 2 subplots, using constrained layout (scales plot to fit every element on the figure)
     fig, axis = plt.subplots(2, layout="constrained")
-    busPerPerson: List[float] = [passenger / bus for passenger, bus in zip(attrData[0], attrData[1])]
-    personalVehiclesThousands: List[float] = attrData[2]
-    axis[0].plot(range(2000, 2013), busPerPerson, label=f"{attrNames[0].capitalize()} per {attrNames[1].lower()}")
-    axis[0].set_title(f"Traffic data of {attrNames[0].lower()} per {attrNames[1].lower()} from 2000 to 2012")
+    busPerPerson: List[float] = [passenger / bus for passenger, bus in zip(dataAtIndex[0], dataAtIndex[1])]
+    personalVehiclesThousands: List[float] = dataAtIndex[2]
+    axis[0].plot(range(2000, 2013), busPerPerson, label=f"{nameAtIndex[0].capitalize()} per {nameAtIndex[1].lower()}")
+    axis[0].set_title(f"Traffic data of {nameAtIndex[0].lower()} per {nameAtIndex[1].lower()} from 2000 to 2012")
     axis[0].grid()
-    axis[0].set(xlabel="year", ylabel=f"{attrNames[0].capitalize()} per {attrNames[1].lower()}")
+    axis[0].set(xlabel="year", ylabel=f"{nameAtIndex[0].capitalize()} per {nameAtIndex[1].lower()}")
     axis[0].xaxis.set_major_locator(tkr.MultipleLocator(1))
     axis[0].yaxis.set_minor_locator(tkr.MultipleLocator(1))
     axis[0].legend()
-    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {attrNames[2].lower()}",
+    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {nameAtIndex[2].lower()}",
                 color="red")
     # Plot the graph for second subplot
-    axis[1].set_title(f"Traffic data of {attrNames[2].lower()} from 2000 to 2012")
+    axis[1].set_title(f"Traffic data of {nameAtIndex[2].lower()} from 2000 to 2012")
     axis[1].grid()
-    axis[1].set(xlabel="year", ylabel=f"Number of {attrNames[2].lower()}")
+    axis[1].set(xlabel="year", ylabel=f"Number of {nameAtIndex[2].lower()}")
     axis[1].xaxis.set_major_locator(tkr.MultipleLocator(1))
     axis[1].yaxis.set_minor_locator(tkr.MultipleLocator(50000))
     axis[1].set_xlim(2000 - 0.5, 2012 + 0.5)
@@ -182,7 +182,7 @@ def getUserSubInput() -> str:
     print(f"{'-' * 43} List of available option inputs {'-' * 43}")
     print("Options:")
     asciiA = ord('A')
-    for i, name in enumerate(attrNames):
+    for i, name in enumerate(nameAtIndex):
         selectionOption: str = chr(asciiA + i)
         print(f"{selectionOption}: {name}")
     print("Select an option above to view the data")
@@ -190,8 +190,8 @@ def getUserSubInput() -> str:
     # keep prompting the user for input until they give valid input
     while True:
         userInput: str = input("Please enter your selection: ").upper()
-        for name in attrNames:
-            charIndex: str = chr(attrNames.index(name) + asciiA)
+        for name in nameAtIndex:
+            charIndex: str = chr(nameAtIndex.index(name) + asciiA)
             if userInput == name.upper() or userInput == charIndex:
                 return charIndex
         if len(userInput) == 0:
@@ -209,12 +209,18 @@ def showMenu() -> None:
     """
     print(f"{'-' * 45} Border Crossing Vehicles 2 {'-' * 46}")
     print("Options:")
-    print(f"A: Display the number of {attrNames[1].lower()} crossing the border for each year, for the 13-year period\n"
+    print(
+          f"A: Display the number of {nameAtIndex[1].lower()} crossing the border for each year, for the 13-year "
+          f"period\n"
+          
           f"B: Display user-selected input's mean number of vehicles from 2000 to 2007 and the maximum traffic in the "
           f"8 years \n"
+          
           f"C: Display user-selected input's year on year growth and list down years that have an increase of >5% \n"
-          f"D: Show a graph of {attrNames[0].lower()} per {attrNames[1].lower()} vs year and "
-          f"number of {attrNames[2].lower()} vs year")
+          
+          f"D: Show a graph of {nameAtIndex[0].lower()} per {nameAtIndex[1].lower()} vs year and "
+          f"number of {nameAtIndex[2].lower()} vs year")
+
     print("Select an option above to view the data, or type 'Quit' to exit the program")
 
 
@@ -282,10 +288,10 @@ def readCSV(fp: Path) -> None:
         next(getCSVContent)
         # Dictionaries are disallowed, so we'll just copy data from CSV to a 2D list
         for eachRow in getCSVContent:
-            attrNames.append(eachRow[0])
-            attrData.append([])
+            nameAtIndex.append(eachRow[0])
+            dataAtIndex.append([])
             # map function maps iterable variables to a new type
-            attrData[len(attrData) - 1] = list(map(int, eachRow[1:len(eachRow)]))
+            dataAtIndex[len(dataAtIndex) - 1] = list(map(int, eachRow[1:len(eachRow)]))
 
     return
 
