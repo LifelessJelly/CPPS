@@ -129,7 +129,8 @@ def displayPlot() -> None:
     axis[0].xaxis.set_major_locator(tkr.MultipleLocator(1))
     axis[0].yaxis.set_minor_locator(tkr.MultipleLocator(1))
     axis[0].legend()
-    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {attrNames[2].lower()}", color="red")
+    axis[1].bar(range(2000, 2013), personalVehiclesThousands, linewidth=1, label=f"Number of {attrNames[2].lower()}",
+                color="red")
     # Plot the graph for second subplot
     axis[1].set_title(f"Traffic data of {attrNames[2].lower()} from 2000 to 2012")
     axis[1].grid()
@@ -251,11 +252,11 @@ def readCSV(fp: Path) -> None:
     csv files passed into this function should follow the table format where the data is pivoted such that the
     vehicle types are the index, and the columns are the months. \n
     e.g.: \n
-    \+--------+--------+--------+---------+\n
+    \+--------+--------+--------+--------+\n
     \|  Type  |  2000  |  2001  |  2002  |\n
-    \+--------+--------+--------+---------+\n
-    \| Cars  |  1234  |  5678  |   9012  |\n
-    \+--------+--------+--------+---------+\n
+    \+--------+--------+--------+--------+\n
+    \|  Cars  |  1234  |  5678  |  9012  |\n
+    \+--------+--------+--------+--------+\n
 
     Where months reside at the top of the table representing columns, and the type of vehicles on the left of the
     table representing indexes.
