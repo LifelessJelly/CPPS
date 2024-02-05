@@ -9,17 +9,17 @@ nameAtIndex: [List[str]] = []
 
 
 def displayDivider() -> None:
-    """Prints a line divider
-    :return:
+    """Prints a line divider.
+    :return: None
     """
     print("-" * 119)
 
 
 # function for displaying bus statistics
 def displayBuses() -> None:
-    """Displays info for task 1
+    """Displays info for task 1.
 
-    :return:
+    :return: None
     """
     print()
     print(f"The statistics for {nameAtIndex[1].lower()} crossing the border each year are:")
@@ -38,10 +38,10 @@ def displayBuses() -> None:
 
 # function for displaying user's input statistics
 def displayUserInput(userInput: str) -> None:
-    """Displays user selected input for task 2
+    """Displays user selected input for task 2.
 
-    :param userInput: the user's input
-    :return:
+    :param userInput: the user's input as a str type
+    :return: None
     """
     print()
     if userInput == '\n':
@@ -69,10 +69,10 @@ def displayUserInput(userInput: str) -> None:
 
 
 def displayYrOnYr(userInput: str) -> None:
-    """Displays user selected input for task 3
+    """Displays user selected input for task 3.
 
-    :param userInput: the user's input
-    :return:
+    :param userInput: the user's input as a str type
+    :return: None
     """
     print()
     if userInput == '\n':
@@ -111,12 +111,12 @@ def displayYrOnYr(userInput: str) -> None:
 
 
 def displayPlot() -> None:
-    """ Displays custom plots for graph plotting
+    """ Displays custom graph plots for task 4.
 
-    See https://matplotlib.org/stable/users/index for matplotlib function documentation \n
+    See https://matplotlib.org/stable/users/index for matplotlib function documentation. \n
     https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot \n
     https://matplotlib.org/stable/api/ticker_api.html#module-matplotlib.ticker \n
-    :return:
+    :return: None
     """
     # 2 subplots, using constrained layout (scales plot to fit every element on the figure)
     fig, axis = plt.subplots(2, layout="constrained")
@@ -149,35 +149,37 @@ def displayPlot() -> None:
 
 
 def getUserSubInput() -> str:
-    """ Retrieves the user input for the set of available data
+    """ Retrieves the user input for the set of available data.
 
     Using a for-each loop, the function prints out both the alphabetical index and the name of the data.
     To iteratively print the alphabetical index, the function uses chr() function call to convert numerical
     data to readable ASCII characters using an ASCII table, with the number 65 for ASCII 'A' being the first
-    in the index \n
+    in the index. \n
     >> ord('A') -> 65 \n
     >> i = 1 \n
     >> chr(i + ord('A')) -> chr(1 + 65) -> 'B' \n
     >> i = 2 \n
     >> chr(i + ord('A')) -> chr(2 + 65) -> 'C' \n
-    * Pressing 'Enter' with no character input will take you back to the first menu \n
+
     To determine and correctly output the data chosen by the user, the function performs a similar operation as to where
     it displays the available data options. \n
     The function gets the user input, then attempt to match the user's input with either the non-case sensitive data
-    identifier or the alphabetical index, by using a .index() method to get the position that the data identifier is in
+    identifier or the alphabetical index, by using a .index() method to get the position that the data identifier is
+    in. \n
     >? Please enter your selection: b \n
     >> userInput = "b".upper() -> "B" \n
     >> name = "BUS PASSENGERS" \n
     >> attrNames.index(name) -> 0 \n
     >> charIndex = chr(0 + 65) -> 'A' \n
-    >> if userInput == name or userInput == charIndex -> 'B' != "BUS PASSENGERS" || 'B' != "A" // Evaluates to false \n
+    >> if userInput == name or userInput == charIndex -> 'B' == "BUS PASSENGERS" OR 'B' == "A" // Evaluates to false \n
     >> name = "BUSES" \n
     >> attrNames.index(name) -> 1 \n
     >> charIndex = chr(1 + 65) -> 'B' \n
-    >> if userInput == name or userInput == charIndex -> 'B' != "BUSES" || 'B' == "B" // Evaluates to true \n
+    >> if userInput == name or userInput == charIndex -> 'B' == "BUSES" OR 'B' == "B" // Evaluates to true \n
+    * Pressing 'Enter' with no character input will take you back to the first menu. \n
 
 
-    :return: the user's input
+    :return: The user's input as a str type
     """
     print(f"{'-' * 43} List of available option inputs {'-' * 43}")
     print("Options:")
@@ -205,7 +207,7 @@ def showMenu() -> None:
     Displays the name of the scenario, followed by the options as outlined by the criteria from the scenario,
     and finally prompt the user to select an option.
 
-    :return:
+    :return: None
     """
     print(f"{'-' * 45} Border Crossing Vehicles 2 {'-' * 46}")
     print("Options:")
@@ -225,12 +227,12 @@ def showMenu() -> None:
 
 
 def getUserInput() -> str:
-    """ Fetches the user's input with respect to the main menu's given selections
+    """ Fetches the user's input with respect to the main menu's given selections.
 
     Keeps prompting the user to give valid input. If the user selects a valid input, then one of the four functions
-    will execute depending on which option they select, or exit the program if 'Quit' is entered
+    will execute depending on which option they select, or exit the program if 'Quit' is entered.
 
-    :return:
+    :return: The user's input as a str type
 
     """
     while True:
@@ -253,7 +255,7 @@ def getUserInput() -> str:
 
 
 def readCSV(fp: Path) -> None:
-    """Reads the csv file passed into this function
+    """Reads the .csv file passed into this function.
 
     csv files passed into this function should follow the table format where the data is pivoted such that the
     vehicle types are the index, and the columns are the months. \n
@@ -279,7 +281,7 @@ def readCSV(fp: Path) -> None:
     sets of data, so the function uses the map() function instead.
 
     :param fp: the filepath location as a pathlib.Path type
-    :return:
+    :return: None
     """
     # read CSV file
     with fp.open(mode="r", encoding="UTF-8", newline="") as loadCSV:
@@ -296,8 +298,8 @@ def readCSV(fp: Path) -> None:
     return
 
 
-#  program starts here
-def main() -> int:
+# program starts here
+def main() -> None:
     filePath = Path.cwd() / "brdrxingusc_dataset.csv"
     readCSV(filePath)
 
@@ -306,7 +308,7 @@ def main() -> int:
         userSelection = getUserInput()
         if userSelection == "QUIT":
             print("EXITING PROGRAM")
-            return 0
+            return
         print()
 
 
